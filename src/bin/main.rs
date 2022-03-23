@@ -40,8 +40,9 @@ fn run_server(port: usize) {
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port)).unwrap();
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap();
+
         // thread::spawn(|| handle_connection(stream));
         pool.execute(|| handle_connection(stream));
     }
